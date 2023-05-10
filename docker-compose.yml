@@ -1,0 +1,25 @@
+version: '3'
+
+volumes:
+  digi_visions_assessment_database_vo:
+    name: digi_visions_assessment_database_vo
+
+networks:
+  digi_visions_assessment_network:
+    name: digi_visions_assessment_network
+
+services:
+  digi_visions_assessment_database:
+    image: postgres:15.1
+    container_name: digi_visions_assessment_database
+    environment:
+      - POSTGRES_USER=digi_visions
+      - POSTGRES_PASSWORD=digi_visions
+      - POSTGRES_DB=digi_visions
+    ports:
+      - 5433:5432
+    volumes:
+      - digi_visions_assessment_database_vo:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - digi_visions_assessment_network
