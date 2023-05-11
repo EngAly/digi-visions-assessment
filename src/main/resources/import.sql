@@ -1,22 +1,9 @@
--- user table
-create TABLE "User" (
-	username varchar NULL,
-	user_id bigint NULL
-);
-
+                                                 -------------- Database assessment -------------
 -- user data
 insert into "User"  (user_id, username) values (1,'John Doe');
 insert into "User"  (user_id,username) values (2,'Jane Don');
 insert into "User"  (user_id,username) values (3, 'Alice Jones');
 insert into "User"  (user_id,username) values (4, 'Lisa Romero');
-
--- Training_details table
-create TABLE "Training_details" (
-	user_training_id bigint,
-	user_id bigint,
-	training_id bigint,
-	training_date date
-);
 
 -- Training_details data
 insert  into "Training_details" (user_training_id, user_id, training_id, training_date) values (1, 1, 1, '2015-08-02');
@@ -34,25 +21,17 @@ insert  into "Training_details" (user_training_id, user_id, training_id, trainin
 insert  into "Training_details" (user_training_id, user_id, training_id, training_date) values (13, 1, 1, '2015-08-02');
 insert  into "Training_details" (user_training_id, user_id, training_id, training_date) values (14, 4, 3,'2015-08-03');
 
--- Query to get the list of users who took the training lesson more than once at the same day,
---grouped by user and training lesson, each ordered from the most recent lesson date to oldest
---date.
-select
-	u.username,
-	u.user_id,
-	td.training_id,
-	td.training_date,
-	count(u.user_id)
-from
-	"User" u
-join "Training_details" td on
-	u.user_id = td.user_id
-group by
-	u.username ,
-	u.user_id,
-	td.training_id,
-	td.training_date
-having
-	count(u.user_id) > 1
-order by
-	td.training_date desc ;
+
+         --------------- application permission setup ----------------
+
+-- permission_groups setup
+insert into permission_groups (id , group_name) values (1,'admin group');
+insert into permission_groups (id , group_name) values (2,'empployee group');
+
+-- permissions setup
+insert into permissions (id, user_email, permission_level, group_id) values (1,'user1@test.com',0,(select id from permission_groups where group_name='admin group'));
+insert into permissions (id, user_email, permission_level, group_id) values (2,'user2@test.com', 1,(select id from permission_groups where group_name='admin group'));
+insert into permissions (id, user_email, permission_level, group_id) values (3,'user3@test.com', 1,(select id from permission_groups where group_name='empployee group'));
+
+
+
