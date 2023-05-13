@@ -17,9 +17,23 @@ services:
       - POSTGRES_PASSWORD=digi_visions
       - POSTGRES_DB=digi_visions
     ports:
-      - 5433:5432
+      - "5433:5432"
     volumes:
       - digi_visions_assessment_database_vo:/var/lib/postgresql/data
     restart: unless-stopped
+    networks:
+      - digi_visions_assessment_network
+
+  digi_visions_assessment:
+    container_name: digi_visions_assessment
+    build: .
+    image: digi_visions/assessment:v1
+    environment:
+      - SPRING_PROFILES_ACTIVE=staging
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - digi_visions_assessment_database
     networks:
       - digi_visions_assessment_network
